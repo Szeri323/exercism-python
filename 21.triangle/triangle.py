@@ -1,22 +1,19 @@
-def check_triangle(sides):
-    if sides[0] > 0 and sides[1] > 0 and sides[2] > 0:
-        if sides[0] + sides[1] >= sides[2] and sides[1] + sides[2] >= sides[0] and sides[0] + sides[2] >= sides[1]:
-            return True
-    return False
+def check_triangle(sides: list) -> bool:
+    if 0 in sides or sum(sides) < 2*(max(sides)):
+        return False
+    return True
 
-def equilateral(sides):
+
+def equilateral(sides: list) -> bool:
     return check_triangle(sides) and (sides[0] == sides[1] and sides[1] == sides[2])
 
 
-def isosceles(sides):
-    if check_triangle(sides):
-        if equilateral(sides):
-            return True
-        else:
-            return ((sides[0] == sides[1] and sides[1] != sides[2]) or (sides[0] != sides[1] and sides[1] == sides[2]) or (sides[0] == sides[1] and sides[0] != sides[2]) or (sides[0] == sides[2] and sides[0] != sides[1]))
+def isosceles(sides: list) -> bool:
+    sorted_sides = sorted(sides)
+    if equilateral(sides) or check_triangle(sides) and not(equilateral(sides)) and (sorted_sides[0] == sorted_sides[1] or sorted_sides[1] == sorted_sides[2]):
+        return True
     return False
-    return check_triangle(sides) and equilateral(sides) or ((sides[0] == sides[1] and sides[1] != sides[2]) or (sides[0] != sides[1] and sides[1] == sides[2]) or (sides[0] == sides[1] and sides[0] != sides[2]))
 
 
-def scalene(sides):
+def scalene(sides: list) -> bool:
     return check_triangle(sides) and not(equilateral(sides)) and not(isosceles(sides))

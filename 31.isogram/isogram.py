@@ -4,10 +4,8 @@ def is_isogram(string):
     for letter in string:
         if letter == "-" or letter == " ":
             continue
-        try:
-            letters[letter]
-        except KeyError:
-            letters[letter] = 1
-        else:
+        if letter in letters:
             return False
+        else:
+            letters[letter] = 1
     return True

@@ -12,7 +12,14 @@ def label(colors):
         "white": 9
     }
     value = colors_dict[colors[0]] * 10 + colors_dict[colors[1]]
-    multiplier = colors_dict[colors[2]] * '0'
-    return str(value) + multiplier
+    multiplier = "0"
+    result = str(value)
+    if(colors_dict[colors[2]]=="black"):
+        result += " ohms"
+    elif(colors_dict[colors[2]] == "brown"):
+        result += "0 ohms"
+    elif(colors_dict[colors[2]] == "red"):
+        multiplier *= colors_dict[colors[2]]
+    return str(value) + multiplier + ("ohm" if value == 1 else "ohms")
 
-print(label(["orange", "orange", "orange"]))
+print(label(["orange", "orange", "red"]))

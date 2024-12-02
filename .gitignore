@@ -1,4 +1,4 @@
 *
 !*.py
-*_test.py
+*_test*.py
 !/*

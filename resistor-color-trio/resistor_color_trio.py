@@ -11,15 +11,45 @@ def label(colors):
         "grey": 8,
         "white": 9
     }
-    value = colors_dict[colors[0]] * 10 + colors_dict[colors[1]]
-    multiplier = "0"
-    result = str(value)
-    if(colors_dict[colors[2]]=="black"):
-        result += " ohms"
-    elif(colors_dict[colors[2]] == "brown"):
-        result += "0 ohms"
-    elif(colors_dict[colors[2]] == "red"):
-        multiplier *= colors_dict[colors[2]]
-    return str(value) + multiplier + ("ohm" if value == 1 else "ohms")
+    value = 0
+    zeros = 0
+    if colors_dict[colors[1]] != 0 :
+        value = colors_dict[colors[0]] * 10 + colors_dict[colors[1]]
+        zeros = colors_dict[colors[2]]
+    else:
+        value = colors_dict[colors[0]]
+        zeros = colors_dict[colors[2]] + 1 
+    if value == 0:
+        zeros = 0
+    number = str(value)
+    zeros_str = zeros * "0"
+    if zeros > 2:
+        if zeros >= 3 and zeros <= 5:
+            if zeros == 4:
+                number += "0"
+            if zeros == 5:
+                number += "00"
+            number += " kilo"
+        if zeros >= 6 and zeros <= 8:
+            if zeros == 7:
+                number += "0"
+            if zeros == 8:
+                number += "00"
+            number += " mega"
+        if zeros >= 9 and zeros <= 11:
+            if zeros == 10:
+                number += "0"
+            if zeros == 11:
+                number += "00"
+            number += " giga"
+    else:
+        number += zeros_str + " ohms"
+        return number
 
-print(label(["orange", "orange", "red"]))
+    number += "ohms"
+    return number
+
+print(label(["orange", "orange", "orange"]))
+print(label(["red", "black", "red"]))
+print(label(["blue", "green", "yellow"]))
+print(label(["yellow", "violet", "yellow"]))

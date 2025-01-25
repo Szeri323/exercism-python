@@ -22,73 +22,31 @@ def resistor_label(colors):
         "silver": 10
     }
     if len(colors) == 1:
-        value_1 = colors_dict[colors[0]]
-        return f"{value_1} ohms"
-    if len(colors) == 4:
-        value_1 = colors_dict[colors[0]]
-        value_2 = colors_dict[colors[1]]
-        multiplier = colors_dict[colors[2]]
-        value = (10 * value_1 + value_2) * 10 ** multiplier
-        if value_2 == 0 :
-            if value >= 1_000_000_000:
-                prefix = "giga"
-                value //= 1_000_000_000
-            elif value >= 1_000_000:
-                prefix = "mega"
-                value //= 1_000_000 
-            elif value >= 1_000:
-                prefix = "kilo"
-                value //= 1_000
-            else:
-                prefix = ""
-        else:
-            if value >= 1_000_000_000:
-                prefix = "giga"
-                value /= 1_000_000_000
-            elif value >= 1_000_000:
-                prefix = "mega"
-                value /= 1_000_000 
-            elif value >= 1_000:
-                prefix = "kilo"
-                value /= 1_000
-            else:
-                prefix = ""
-        if str(value).endswith(".0"):
-            value = str(value).replace(".0", "")
-        tolerance = tolerance_dict[colors[3]]
-        return f"{value} {prefix}ohms ±{tolerance}%"
-    if len(colors) == 5:
-        value_1 = colors_dict[colors[0]]
-        value_2 = colors_dict[colors[1]]
-        value_3 = colors_dict[colors[2]]
-        multiplier = colors_dict[colors[3]]
-        value = (100 * value_1 + 10 * value_2 + value_3) * 10 ** multiplier
-        
-        if value_3 == 0 :
-            if value >= 1_000_000_000:
-                prefix = "giga"
-                value //= 1_000_000_000
-            elif value >= 1_000_000:
-                prefix = "mega"
-                value //= 1_000_000 
-            elif value >= 1_000:
-                prefix = "kilo"
-                value //= 1_000
-            else:
-                prefix = ""
-        else:
-            if value >= 1_000_000_000:
-                prefix = "giga"
-                value /= 1_000_000_000
-            elif value >= 1_000_000:
-                prefix = "mega"
-                value /= 1_000_000 
-            elif value >= 1_000:
-                prefix = "kilo"
-                value /= 1_000
-            else:
-                prefix = ""
-        tolerance = tolerance_dict[colors[4]]
-        return f"{value} {prefix}ohms ±{tolerance}%"
+        return f"{colors_dict[colors[0]]} ohms"
+    if len(colors) == 2:
+        return f"{colors_dict[colors[0]] + colors_dict[colors[1]]} ohms"
+    if len(colors) > 3:
+        *values, multiplier, tolerance = colors
+    else:
+        values, multiplier, tolerance = colors
+        values = [values]
+    val = ""
+    prefix = ""
+    for value in values:
+        val += str(colors_dict[value])
+    val = int(val) * 10 ** colors_dict[multiplier]
+    
+    level = 0
 
-print(resistor_label(["red", "blue", "red", "green"]))
+    while val >= 1000:
+        val /= 1000
+        level += 1
+    if level == 1:
+        prefix = "kilo"
+    elif level == 2:
+        prefix = "mega"
+    elif level == 3:
+        prefix = "giga"
+    if val - int(val) == 0:
+        val = int(val)
+    return f"{val} {prefix}ohms ±{tolerance_dict[tolerance]}%"
